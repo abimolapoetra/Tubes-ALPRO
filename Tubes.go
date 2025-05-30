@@ -99,3 +99,30 @@ func main() {
         }
     }
 }
+
+func loginUser() bool {
+    var uname, pass string
+    fmt.Print("Masukkan username: ")
+    fmt.Scan(&uname)
+    fmt.Print("Masukkan password: ")
+    fmt.Scan(&pass)
+
+    for i := 0; i < userCount; i++ {
+        if userList[i].Username == uname && userList[i].Password == pass {
+            currentUserIndex = i
+            fmt.Printf("=== Selamat datang, %s ===\n", uname)
+            return true
+        }
+    }
+
+    fmt.Println("Username atau password salah!")
+    return false
+}
+
+
+func initSampleData() {
+    cryptoList[0] = Crypto{1, "Bitcoin", "BTC", 65000, 1200000000}
+    cryptoList[1] = Crypto{2, "Ethereum", "ETH", 3200, 380000000}
+    cryptoList[2] = Crypto{3, "Dogecoin", "DOGE", 0.15, 20000000}
+    cryptoCount = 3
+}
