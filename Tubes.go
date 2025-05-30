@@ -209,3 +209,20 @@ func searchSequential() {
         printCrypto(cryptoList[idx])
     }
 }
+
+func binarySearch(keyword string) int {
+    left := 0
+    right := cryptoCount - 1
+
+    for left <= right {
+        mid := (left + right) / 2
+        if strings.EqualFold(cryptoList[mid].Name, keyword) {
+            return mid
+        } else if strings.ToLower(keyword) < strings.ToLower(cryptoList[mid].Name) {
+            right = mid - 1
+        } else {
+            left = mid + 1
+        }
+    }
+    return -1
+}
