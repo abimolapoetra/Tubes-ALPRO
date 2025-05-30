@@ -126,3 +126,45 @@ func initSampleData() {
     cryptoList[2] = Crypto{3, "Dogecoin", "DOGE", 0.15, 20000000}
     cryptoCount = 3
 }
+
+func addCrypto() {
+    if cryptoCount >= NMAX {
+        fmt.Println("Database penuh!")
+        return
+    }
+
+    var name, symbol string
+    var price, marketCap float64
+
+    fmt.Print("Masukkan nama crypto: ")
+    fmt.Scan(&name)
+    fmt.Print("Masukkan simbol: ")
+    fmt.Scan(&symbol)
+    fmt.Print("Masukkan harga: ")
+    fmt.Scan(&price)
+    fmt.Print("Masukkan market cap: ")
+    fmt.Scan(&marketCap)
+
+    cryptoCount++
+    cryptoList[cryptoCount-1] = Crypto{cryptoCount, name, strings.ToUpper(symbol), price, marketCap}
+    fmt.Println("Data berhasil ditambahkan!")
+}
+
+func editCrypto() {
+    var keyword string
+    fmt.Print("Masukkan nama crypto yang ingin diedit: ")
+    fmt.Scan(&keyword)
+
+    idx := sequentialSearch(keyword)
+    if idx == -1 {
+        fmt.Println("Crypto tidak ditemukan!")
+        return
+    }
+
+    fmt.Print("Masukkan harga baru: ")
+    fmt.Scan(&cryptoList[idx].Price)
+    fmt.Print("Masukkan market cap baru: ")
+    fmt.Scan(&cryptoList[idx].MarketCap)
+
+    fmt.Println("Data berhasil diperbarui!")
+}
