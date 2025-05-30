@@ -168,3 +168,44 @@ func editCrypto() {
 
     fmt.Println("Data berhasil diperbarui!")
 }
+
+func deleteCrypto() {
+    var keyword string
+    fmt.Print("Masukkan nama crypto yang ingin dihapus: ")
+    fmt.Scan(&keyword)
+
+    idx := sequentialSearch(keyword)
+    if idx == -1 {
+        fmt.Println("Crypto tidak ditemukan!")
+        return
+    }
+
+    for i := idx; i < cryptoCount-1; i++ {
+        cryptoList[i] = cryptoList[i+1]
+    }
+    cryptoCount--
+
+    fmt.Println("Data berhasil dihapus!")
+}
+
+func sequentialSearch(keyword string) int {
+    for i := 0; i < cryptoCount; i++ {
+        if strings.EqualFold(cryptoList[i].Name, keyword) {
+            return i
+        }
+    }
+    return -1
+}
+
+func searchSequential() {
+    var keyword string
+    fmt.Print("Masukkan nama crypto: ")
+    fmt.Scan(&keyword)
+
+    idx := sequentialSearch(keyword)
+    if idx == -1 {
+        fmt.Println("Crypto tidak ditemukan!")
+    } else {
+        printCrypto(cryptoList[idx])
+    }
+}
