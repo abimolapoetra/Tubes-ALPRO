@@ -241,3 +241,64 @@ func searchBinary() {
         printCrypto(cryptoList[idx])
     }
 }
+
+func displayCryptoMenu() {
+    var choice, asc int
+
+    fmt.Println("\nUrutkan berdasarkan:")
+    fmt.Println("1. Nama (Insertion Sort)")
+    fmt.Println("2. Harga (Selection Sort)")
+    fmt.Print("Pilih: ")
+    fmt.Scan(&choice)
+
+    fmt.Print("Urutan (1: ASC, 2: DESC): ")
+    fmt.Scan(&asc)
+
+    isAsc := asc == 1
+
+    if choice == 1 {
+        insertionSortByName(isAsc)
+    } else if choice == 2 {
+        selectionSortByPrice(isAsc)
+    } else {
+        fmt.Println("Pilihan salah!")
+        return
+    }
+
+    displayCryptoList()
+}
+
+func displayCryptoList() {
+    fmt.Println("\nID | Nama | Simbol | Harga | MarketCap")
+    for i := 0; i < cryptoCount; i++ {
+        printCrypto(cryptoList[i])
+    }
+}
+
+func printCrypto(c Crypto) {
+    fmt.Printf("%d | %s | %s | $%.2f | $%.2f\n", c.ID, c.Name, c.Symbol, c.Price, c.MarketCap)
+}
+
+func selectionSortByPrice(ascending bool) {
+    for i := 0; i < cryptoCount-1; i++ {
+        idx := i
+        for j := i + 1; j < cryptoCount; j++ {
+            if ascending && cryptoList[j].Price < cryptoList[idx].Price || !ascending && cryptoList[j].Price > cryptoList[idx].Price {
+                idx = j
+            }
+        }
+        cryptoList[i], cryptoList[idx] = cryptoList[idx], cryptoList[i]
+    }
+}
+
+func insertionSortByName(ascending bool) {
+    for i := 1; i < cryptoCount; i++ {
+        temp := cryptoList[i]
+        j := i - 1
+        for j >= 0 && ((ascending && strings.ToLower(cryptoList[j].Name) > strings.ToLower(temp.Name)) || (!ascending && strings.ToLower(cryptoList[j].Name) < strings.ToLower(temp.Name))) {
+            cryptoList[j+1] = cryptoList[j]
+            j--
+        }
+        cryptoList[j+1] = temp
+    }
+}
