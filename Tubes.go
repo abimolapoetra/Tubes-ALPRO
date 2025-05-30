@@ -357,3 +357,98 @@ func findCryptoByID(id int) int {
     }
     return -1
 }
+
+func addCryptoToUser() {
+    if cryptoCount == 0 {
+        fmt.Println("Belum ada crypto yang tersedia.")
+        return
+    }
+    var keyword string
+    fmt.Print("Masukkan nama crypto yang ingin ditambah: ")
+    fmt.Scan(&keyword)
+    idx := sequentialSearch(keyword)
+    if idx == -1 {
+        fmt.Println("Crypto tidak ditemukan.")
+        return
+    }
+    var amount float64
+    fmt.Print("Masukkan jumlah yang ingin ditambahkan: ")
+    fmt.Scan(&amount)
+    if amount <= 0 {
+        fmt.Println("Jumlah harus positif.")
+        return
+    }
+    
+    for i := 0; i < holdingsCount[currentUserIndex]; i++ {
+        if userHoldings[currentUserIndex][i].CryptoID == cryptoList[idx].ID {
+            userHoldings[currentUserIndex][i].Amount += amount
+            fmt.Println("Jumlah crypto berhasil ditambahkan.")
+            return
+        }
+    }
+    
+    userHoldings[currentUserIndex][holdingsCount[currentUserIndex]] = OwnedCrypto{
+        CryptoID: cryptoList[idx].ID,
+        Amount:   amount,
+    }
+    holdingsCount[currentUserIndex]++
+    fmt.Println("Crypto berhasil ditambahkan ke kepemilikan Anda.")
+}
+
+func editCryptoUser() {
+    if holdingsCount[currentUserIndex] == 0 {
+        fmt.Println("Anda belum memiliki crypto.")
+        return
+    }
+    var keyword string
+    fmt.Print("Masukkan nama crypto yang ingin diedit jumlahnya: ")
+    fmt.Scan(&keyword)
+    cIdx := sequentialSearch(keyword)
+    if cIdx == -1 {
+        fmt.Println("Crypto tidak ditemukan.")
+        return
+    }
+    
+    for i := 0; i < holdingsCount[currentUserIndex]; i++ {
+        if userHoldings[currentUserIndex][i].CryptoID == cryptoList[cIdx].ID {
+            var newAmount float64
+            fmt.Print("Masukkan jumlah baru: ")
+            fmt.Scan(&newAmount)
+            if newAmount < 0 {
+                fmt.Println("Jumlah tidak boleh negatif.")
+                return
+            }
+            userHoldings[currentUserIndex][i].Amount = newAmount
+            fmt.Println("Jumlah berhasil diubah.")
+            return
+        }
+    }
+    fmt.Println("Anda tidak memiliki crypto ini.")
+}
+
+func deleteCryptoUser() {
+    if holdingsCount[currentUserIndex] == 0 {
+        fmt.Println("Anda belum memiliki crypto.")
+        return
+    }
+    var keyword string
+    fmt.Print("Masukkan nama crypto yang ingin dihapus dari kepemilikan: ")
+    fmt.Scan(&keyword)
+    cIdx := sequentialSearch(keyword)
+    if cIdx == -1 {
+        fmt.Println("Crypto tidak ditemukan.")
+        return
+    }
+    
+    for i := 0; i < holdingsCount[currentUserIndex]; i++ {
+        if userHoldings[currentUserIndex][i].CryptoID == cryptoList[cIdx].ID {
+            for j := i; j < holdingsCount[currentUserIndex]-1; j++ {
+                userHoldings[currentUserIndex][j] = userHoldings[currentUserIndex][j+1]
+            }
+            holdingsCount[currentUserIndex]--
+            fmt.Println("Crypto berhasil dihapus dari kepemilikan Anda.")
+            return
+        }
+    }
+    fmt.Println("Anda tidak memiliki crypto ini.")
+}
