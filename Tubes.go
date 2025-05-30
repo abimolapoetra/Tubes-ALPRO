@@ -226,3 +226,18 @@ func binarySearch(keyword string) int {
     }
     return -1
 }
+
+func searchBinary() {
+    insertionSortByName(true)
+
+    var keyword string
+    fmt.Print("Masukkan nama crypto: ")
+    fmt.Scan(&keyword)
+
+    idx := binarySearch(keyword)
+    if idx == -1 {
+        fmt.Println("Crypto tidak ditemukan!")
+    } else {
+        printCrypto(cryptoList[idx])
+    }
+}
