@@ -452,3 +452,71 @@ func deleteCryptoUser() {
     }
     fmt.Println("Anda tidak memiliki crypto ini.")
 }
+
+func simulateTrade() {
+    if cryptoCount == 0 {
+        fmt.Println("Belum ada crypto yang tersedia.")
+        return
+    }
+    var keyword string
+    fmt.Print("Masukkan nama crypto yang ingin ditransaksikan: ")
+    fmt.Scan(&keyword)
+    cIdx := sequentialSearch(keyword)
+    if cIdx == -1 {
+        fmt.Println("Crypto tidak ditemukan.")
+        return
+    }
+    var tradeType int
+    fmt.Println("1. Beli")
+    fmt.Println("2. Jual")
+    fmt.Print("Pilih transaksi: ")
+    fmt.Scan(&tradeType)
+
+    var amount float64
+    fmt.Print("Masukkan jumlah: ")
+    fmt.Scan(&amount)
+    if amount <= 0 {
+        fmt.Println("Jumlah harus positif.")
+        return
+    }
+
+    switch tradeType {
+    case 1: 
+        for i := 0; i < holdingsCount[currentUserIndex]; i++ {
+            if userHoldings[currentUserIndex][i].CryptoID == cryptoList[cIdx].ID {
+                userHoldings[currentUserIndex][i].Amount += amount
+                fmt.Println("Transaksi beli berhasil.")
+                return
+            }
+        }
+        
+        userHoldings[currentUserIndex][holdingsCount[currentUserIndex]] = OwnedCrypto{
+            CryptoID: cryptoList[cIdx].ID,
+            Amount:   amount,
+        }
+        holdingsCount[currentUserIndex]++
+        fmt.Println("Transaksi beli berhasil.")
+    case 2: 
+        for i := 0; i < holdingsCount[currentUserIndex]; i++ {
+            if userHoldings[currentUserIndex][i].CryptoID == cryptoList[cIdx].ID {
+                if userHoldings[currentUserIndex][i].Amount < amount {
+                    fmt.Println("Jumlah jual melebihi kepemilikan.")
+                    return
+                }
+                userHoldings[currentUserIndex][i].Amount -= amount
+                fmt.Println("Transaksi jual berhasil.")
+                if userHoldings[currentUserIndex][i].Amount == 0 {
+                    
+                    for j := i; j < holdingsCount[currentUserIndex]-1; j++ {
+                        userHoldings[currentUserIndex][j] = userHoldings[currentUserIndex][j+1]
+                    }
+                    holdingsCount[currentUserIndex]--
+                }
+                return
+            }
+        }
+        fmt.Println("Anda tidak memiliki crypto ini.")
+    default:
+        fmt.Println("Pilihan transaksi salah.")
+    }
+}
