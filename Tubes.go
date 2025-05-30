@@ -302,3 +302,49 @@ func insertionSortByName(ascending bool) {
         cryptoList[j+1] = temp
     }
 }
+
+func viewMyCrypto() {
+    for {
+        fmt.Printf("\n=== Menu Crypto %s ===\n", userList[currentUserIndex].Username)
+        fmt.Println("1. Lihat Kepemilikan Crypto")
+        fmt.Println("2. Tambah Koin Baru")
+        fmt.Println("3. Edit Koin")
+        fmt.Println("4. Hapus Koin")
+        fmt.Println("5. Transaksi Koin (Beli/Jual)")
+        fmt.Println("6. Kembali ke Menu Utama")
+        fmt.Print("Pilih menu: ")
+
+        var pilihan int
+        fmt.Scan(&pilihan)
+
+        switch pilihan {
+        case 1:
+            if holdingsCount[currentUserIndex] == 0 {
+                fmt.Println("Anda belum memiliki crypto.")
+            } else {
+                fmt.Println("Nama | Simbol | Jumlah | Total ($)")
+                for i := 0; i < holdingsCount[currentUserIndex]; i++ {
+                    oc := userHoldings[currentUserIndex][i]
+                    cIdx := findCryptoByID(oc.CryptoID)
+                    if cIdx != -1 {
+                        c := cryptoList[cIdx]
+                        total := oc.Amount * c.Price
+                        fmt.Printf("%s | %s | %.4f | %.2f\n", c.Name, c.Symbol, oc.Amount, total)
+                    }
+                }
+            }
+        case 2:
+            addCryptoToUser()
+        case 3:
+            editCryptoUser()
+        case 4:
+            deleteCryptoUser()
+        case 5:
+            simulateTrade()
+        case 6:
+            return
+        default:
+            fmt.Println("Pilihan tidak valid!")
+        }
+    }
+}
