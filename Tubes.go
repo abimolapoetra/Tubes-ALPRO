@@ -520,3 +520,17 @@ func simulateTrade() {
         fmt.Println("Pilihan transaksi salah.")
     }
 }
+
+func searchByPriceAbove10() {
+    fmt.Println("Crypto dengan harga > $10:")
+    found := false
+    for i := 0; i < cryptoCount; i++ {
+        if cryptoList[i].Price > 10 {
+            printCrypto(cryptoList[i])
+            found = true
+        }
+    }
+    if !found {
+        fmt.Println("Tidak ditemukan crypto dengan harga di atas $10.")
+    }
+}
