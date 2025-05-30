@@ -348,3 +348,12 @@ func viewMyCrypto() {
         }
     }
 }
+
+func findCryptoByID(id int) int {
+    for i := 0; i < cryptoCount; i++ {
+        if cryptoList[i].ID == id {
+            return i
+        }
+    }
+    return -1
+}
